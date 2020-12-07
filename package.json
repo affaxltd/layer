@@ -22,7 +22,7 @@
     "console:fork": "yarn truffle console --network fork",
     "test:fork": "yarn truffle test --network fork ./test/mainnet-fork-tests.js",
     "run:fork": "yarn ganache-cli --fork https://mainnet.infura.io/v3/bd0c2cf1b7de43c9a3a70ce2f577d29c --defaultBalanceEther 1000 --quiet",
-    "suite:fork": "yarn concurrently --kill-others \"yarn run:fork\" \"yarn test:fork\""
+    "suite:fork": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn test:fork\""
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
