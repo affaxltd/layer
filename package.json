@@ -15,14 +15,14 @@
     "truffle-assertions": "^0.9.2"
   },
   "scripts": {
-    "compile": "truffle compile",
-    "deploy:kovan": "truffle migrate --network kovan",
-    "deploy:mainnet": "truffle migrate --network mainnet",
-    "deploy:fork": "truffle migrate --network fork",
-    "console:fork": "truffle console --network fork",
-    "test:fork": "truffle test --network fork ./test/mainnet-fork-tests.js",
-    "run:fork": "ganache-cli --fork https://mainnet.infura.io/v3/bd0c2cf1b7de43c9a3a70ce2f577d29c --defaultBalanceEther 1000 --quiet",
-    "suite:fork": "concurrently --kill-others \"yarn run:fork\" \"yarn test:fork\""
+    "compile": "yarn truffle compile",
+    "deploy:kovan": "yarn truffle migrate --network kovan",
+    "deploy:mainnet": "yarn truffle migrate --network mainnet",
+    "deploy:fork": "yarn truffle migrate --network fork",
+    "console:fork": "yarn truffle console --network fork",
+    "test:fork": "yarn truffle test --network fork ./test/mainnet-fork-tests.js",
+    "run:fork": "yarn ganache-cli --fork https://mainnet.infura.io/v3/bd0c2cf1b7de43c9a3a70ce2f577d29c --defaultBalanceEther 1000 --quiet",
+    "suite:fork": "yarn concurrently --kill-others \"yarn run:fork\" \"yarn test:fork\""
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
@@ -34,6 +34,7 @@
     "eslint-plugin-prettier": "^3.2.0",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "ganache-cli": "^6.12.1",
     "prettier": "^2.2.1"
   }
 }
