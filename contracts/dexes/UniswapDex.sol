@@ -2,14 +2,17 @@
 pragma solidity ^0.6.12;
 
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+
 import "../libraries/UniswapV2Library.sol";
-import "../libraries/SafeMath.sol";
-import "../interfaces/IERC20.sol";
 import "../interfaces/ILiquidityDex.sol";
 import "../interfaces/IUniswapV2Factory.sol";
 
 contract UniswapDex is ILiquidityDex {
   using SafeMath for uint256;
+  using SafeERC20 for IERC20;
 
   receive() external payable {}
 
@@ -24,19 +27,12 @@ contract UniswapDex is ILiquidityDex {
     address spender,
     address payable target
   ) public override {
-    require(IERC20(sellToken).transferFrom(spender, address(this), amountIn), "Transfer failed");
+    IERC20(sellToken).safeTransferFrom(spender, address(this), amountIn);
+    IERC20(sellToken).safeIncreaseAllowance(uniswapRouter, amountIn);
 
     address[] memory path = _getRoute(buyToken, sellToken);
 
-    require(IERC20(sellToken).approve(uniswapRouter, amountIn), "Approval failed");
-
-    IUniswapV2Router02(uniswapRouter).swapExactTokensForTokens(
-      amountIn,
-      minAmountOut,
-      path,
-      target,
-      block.timestamp
-    );
+    IUniswapV2Router02(uniswapRouter).swapExactTokensForTokens(amountIn, minAmountOut, path, target, block.timestamp);
 
     target.transfer(address(this).balance);
   }
@@ -57,10 +53,7 @@ contract UniswapDex is ILiquidityDex {
         return 0;
       }
     } else {
-      if (
-        factory.getPair(buyToken, weth) == address(0) ||
-        factory.getPair(weth, sellToken) == address(0)
-      ) {
+      if (factory.getPair(buyToken, weth) == address(0) || factory.getPair(weth, sellToken) == address(0)) {
         return 0;
       }
     }

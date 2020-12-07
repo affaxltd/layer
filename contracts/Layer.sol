@@ -2,14 +2,17 @@
 pragma solidity ^0.6.12;
 pragma experimental ABIEncoderV2;
 
-import "./access/Ownable.sol";
-import "./libraries/SafeMath.sol";
-import "./interfaces/IERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+
 import "./interfaces/ILayer.sol";
 import "./interfaces/ILiquidityDex.sol";
 
 contract Layer is Ownable, ILayer {
   using SafeMath for uint256;
+  using SafeERC20 for IERC20;
 
   event Swap(
     address buyToken,
@@ -26,40 +29,13 @@ contract Layer is Ownable, ILayer {
   mapping(string => address) public getDex;
   string[] public allDexes;
 
-  function swapTokenOnAllDexes(
-    address buyToken,
-    address sellToken,
+  function swapTokenOnMultipleDEXes(
     uint256 amountIn,
     uint256 slippage,
-    address payable target
-  ) public override returns (uint256) {
-    _check(buyToken, sellToken, target, amountIn, slippage);
-
-    string memory dexName = getBestDexForSwap(buyToken, sellToken, amountIn);
-
-    require(_dexExists(dexName), "Dex does not exist");
-
-    return _swap(buyToken, sellToken, amountIn, slippage, msg.sender, target, dexName);
-  }
-
-  function swapTokensOnAllDexes(
-    address buyToken,
-    address[] memory sellTokens,
-    uint256[] memory amountsIn,
-    uint256 slippage,
-    address payable target
-  ) public override returns (uint256) {
-    require(sellTokens.length > 0, "Arrays cannot be empty");
-    require(sellTokens.length == amountsIn.length, "Arrays not matching");
-
-    uint256 total = 0;
-
-    for (uint256 i = 0; i < sellTokens.length; i++) {
-      total += swapTokenOnAllDexes(buyToken, sellTokens[i], amountsIn[i], slippage, target);
-    }
-
-    return total;
-  }
+    address payable target,
+    address[] memory path,
+    string[] memory dexes
+  ) public override returns (uint256) {}
 
   function swapTokenOnDEX(
     address buyToken,
@@ -176,7 +152,7 @@ contract Layer is Ownable, ILayer {
 
     require(_balance(sellToken, target) >= amountIn, "Not enough tokens");
 
-    require(IERC20(sellToken).transferFrom(target, address(this), amountIn), "Transfer failed");
+    IERC20(sellToken).safeTransferFrom(target, address(this), amountIn);
   }
 
   function _swap(
@@ -199,7 +175,7 @@ contract Layer is Ownable, ILayer {
     uint256 minAmountOut = _calculateMinimum(received, slippage);
     uint256 originalBalance = _balance(buyToken, target);
 
-    require(IERC20(sellToken).approve(dex, amountIn), "Error in approval");
+    IERC20(sellToken).safeIncreaseAllowance(dex, amountIn);
 
     ILiquidityDex(dex).doSwap(buyToken, sellToken, amountIn, minAmountOut, address(this), target);
 
