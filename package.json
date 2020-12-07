@@ -21,9 +21,11 @@
     "deploy:fork": "truffle migrate --network fork",
     "console:fork": "truffle console --network fork",
     "test:fork": "truffle test --network fork ./test/mainnet-fork-tests.js",
-    "run:fork": "ganache-cli --fork https://mainnet.infura.io/v3/bd0c2cf1b7de43c9a3a70ce2f577d29c --defaultBalanceEther 1000"
+    "run:fork": "ganache-cli --fork https://mainnet.infura.io/v3/bd0c2cf1b7de43c9a3a70ce2f577d29c --defaultBalanceEther 1000 --quiet",
+    "suite:fork": "concurrently --kill-others \"yarn run:fork\" \"yarn test:fork\""
   },
   "devDependencies": {
+    "concurrently": "^5.3.0",
     "eslint": "^7.15.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^7.0.0",
