@@ -14,20 +14,12 @@ contract Layer is Ownable, ILayer {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
-  event Swap(
-    address buyToken,
-    address sellToken,
-    address initiator,
-    address target,
-    uint256 amountIn,
-    uint256 slippage,
-    uint256 total
-  );
-
   uint256 public constant MaxSlippage = 1e6;
 
   mapping(string => address) public getDex;
   string[] public allDexes;
+
+  receive() external payable {}
 
   function swapTokenOnMultipleDEXes(
     uint256 amountIn,
@@ -35,7 +27,32 @@ contract Layer is Ownable, ILayer {
     address payable target,
     address[] memory path,
     string[] memory dexes
-  ) public override returns (uint256) {}
+  ) public override returns (uint256) {
+    require(path.length == dexes.length.add(1), "Invalid number of inputs");
+    require(path.length >= 3, "Not enough hops");
+
+    _check(path[1], path[0], target, amountIn, slippage);
+
+    IERC20(path[0]).safeTransferFrom(target, address(this), amountIn);
+
+    uint256 amount = amountIn;
+
+    for (uint256 i = 0; i < dexes.length; i++) {
+      address buyToken = path[i + 1];
+      address sellToken = path[i];
+
+      require(buyToken != sellToken, "Cannot buy and sell same token");
+
+      _swap(buyToken, sellToken, amount, slippage, msg.sender, address(this), dexes[i]);
+
+      amount = IERC20(buyToken).balanceOf(address(this));
+    }
+
+    IERC20(path[path.length - 1]).safeTransfer(target, amount);
+    target.transfer(address(this).balance);
+
+    return amount;
+  }
 
   function swapTokenOnDEX(
     address buyToken,
@@ -48,6 +65,8 @@ contract Layer is Ownable, ILayer {
     require(_dexExists(dexName), "Dex does not exist");
 
     _check(buyToken, sellToken, target, amountIn, slippage);
+
+    IERC20(sellToken).safeTransferFrom(target, address(this), amountIn);
 
     return _swap(buyToken, sellToken, amountIn, slippage, msg.sender, target, dexName);
   }
@@ -140,17 +159,13 @@ contract Layer is Ownable, ILayer {
     address target,
     uint256 amountIn,
     uint256 slippage
-  ) internal {
+  ) internal view {
     require(amountIn > 0, "No tokens being swapped");
     require(buyToken != sellToken, "Cannot buy and sell same token");
     require(slippage > 0, "Slippage cannot be 0");
     require(slippage <= MaxSlippage, "Slippage cannot over max");
-
     require(IERC20(sellToken).allowance(target, address(this)) >= amountIn, "Not approved");
-
     require(_balance(sellToken, target) >= amountIn, "Not enough tokens");
-
-    IERC20(sellToken).safeTransferFrom(target, address(this), amountIn);
   }
 
   function _swap(

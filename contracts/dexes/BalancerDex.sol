@@ -49,7 +49,7 @@ contract BalancerDex is ILiquidityDex {
     address sellToken,
     uint256 amountIn
   ) public override view returns (uint256) {
-    address[] memory result = IBalancerRegistry(balancerRegistry).getPoolsWithLimit(sellToken, buyToken, 0, 1);
+    address[] memory result = IBalancerRegistry(balancerRegistry).getBestPoolsWithLimit(sellToken, buyToken, maxPools);
 
     if (result.length == 0) {
       return 0;

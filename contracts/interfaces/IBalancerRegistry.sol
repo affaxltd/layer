@@ -2,10 +2,9 @@
 pragma solidity ^0.6.12;
 
 interface IBalancerRegistry {
-  function getPoolsWithLimit(
+  function getBestPoolsWithLimit(
     address fromToken,
     address destToken,
-    uint256 offset,
     uint256 limit
   ) external view returns (address[] memory result);
 }

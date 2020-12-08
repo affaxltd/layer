@@ -21,10 +21,10 @@
     "deploy:fork": "yarn truffle migrate --network fork",
     "console:fork": "yarn truffle console --network fork",
     "run:fork": "yarn ganache-cli --fork https://mainnet.infura.io/v3/bd0c2cf1b7de43c9a3a70ce2f577d29c --defaultBalanceEther 10000 --gasPrice 1000000000 --quiet --forkCacheSize -1 --keepAliveTimeout 10000 --unlock \"0x47ac0fb4f2d84898e4d9e7b4dab3c24507a6d503\"",
+    "test:multidex": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/multidex.js\"",
     "test:balancer": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/balancer.js\"",
     "test:curve": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/curve.js\"",
-    "test:defi": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/defi.js\"",
-    "test:kyber": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/kyber.js\"",
+    "test:defiswap": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/defiswap.js\"",
     "test:sushi": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/sushi.js\"",
     "test:univ2": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/univ2.js\""
   },

@@ -3,6 +3,16 @@ pragma solidity ^0.6.12;
 pragma experimental ABIEncoderV2;
 
 interface ILayer {
+  event Swap(
+    address buyToken,
+    address sellToken,
+    address initiator,
+    address target,
+    uint256 amountIn,
+    uint256 slippage,
+    uint256 total
+  );
+
   function swapTokenOnMultipleDEXes(
     uint256 amountIn,
     uint256 slippage,

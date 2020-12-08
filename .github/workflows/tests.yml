@@ -11,10 +11,11 @@ jobs:
       matrix:
         dex:
           - balancer
-          - defi
+          - defiswap
           - curve
           - sushi
           - univ2
+          - multidex
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
