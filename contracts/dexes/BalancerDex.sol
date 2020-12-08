@@ -14,7 +14,7 @@ contract BalancerDex is ILiquidityDex {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
-  uint256 private constant maxPools = 3;
+  uint256 private constant maxPools = 2;
 
   receive() external payable {}
 

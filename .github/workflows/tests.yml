@@ -11,6 +11,7 @@ jobs:
       matrix:
         dex:
           - balancer
+          - defi
           - curve
           - sushi
           - univ2

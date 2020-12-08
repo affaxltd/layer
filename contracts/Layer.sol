@@ -77,9 +77,9 @@ contract Layer is Ownable, ILayer {
     address buyToken,
     address sellToken,
     uint256 amount
-  ) public override view returns (string memory) {
-    string memory best = allDexes[0];
-    uint256 count = ILiquidityDex(getDex[best]).getReturn(buyToken, sellToken, amount);
+  ) public override view returns (string memory best, uint256 count) {
+    best = allDexes[0];
+    count = ILiquidityDex(getDex[best]).getReturn(buyToken, sellToken, amount);
 
     for (uint256 i = 0; i < allDexes.length; i++) {
       if (i == 0) continue;
@@ -93,8 +93,6 @@ contract Layer is Ownable, ILayer {
         best = dexName;
       }
     }
-
-    return best;
   }
 
   function getAllDexes() public override view returns (string[] memory) {

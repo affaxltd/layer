@@ -33,7 +33,7 @@ interface ILayer {
     address buyToken,
     address sellToken,
     uint256 amount
-  ) external view returns (string memory);
+  ) external view returns (string memory best, uint256 count);
 
   function getAllDexes() external view returns (string[] memory);
 }
