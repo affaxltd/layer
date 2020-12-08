@@ -4,8 +4,16 @@ on: push
 
 jobs:
   test:
-    name: Test Layer contracts
+    name: Test Layer contracts for ${{ matrix.dex }} dex
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dex:
+          - balancer
+          - curve
+          - sushi
+          - univ2
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -25,4 +33,4 @@ jobs:
           yarn
       - name: "Run tests"
         run: |
-          yarn suite:fork
+          yarn test:${{ matrix.dex }}
