@@ -16,6 +16,7 @@
   },
   "scripts": {
     "compile": "yarn truffle compile",
+    "flatten": "truffle-flattener ./contracts/Layer.sol > ./build/Layer.sol",
     "deploy:kovan": "yarn truffle migrate --network kovan",
     "deploy:mainnet": "yarn truffle migrate --network mainnet",
     "deploy:fork": "yarn truffle migrate --network fork",
@@ -23,10 +24,16 @@
     "run:fork": "yarn ganache-cli --fork https://mainnet.infura.io/v3/bd0c2cf1b7de43c9a3a70ce2f577d29c --defaultBalanceEther 10000 --gasPrice 1000000000 --quiet --forkCacheSize -1 --keepAliveTimeout 10000 --unlock \"0x47ac0fb4f2d84898e4d9e7b4dab3c24507a6d503\"",
     "test:multidex": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/multidex.js\"",
     "test:balancer": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/balancer.js\"",
+    "flatten:balancer": "truffle-flattener ./contracts/dexes/BalancerDex.sol > ./build/dexes/BalancerDex.sol",
     "test:curve": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/curve.js\"",
+    "flatten:curve": "truffle-flattener ./contracts/dexes/CurveDex.sol > ./build/dexes/CurveDex.sol",
     "test:defiswap": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/defiswap.js\"",
+    "flatten:defiswap": "truffle-flattener ./contracts/dexes/DefiswapDex.sol > ./build/dexes/DefiswapDex.sol",
     "test:sushi": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/sushi.js\"",
-    "test:univ2": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/univ2.js\""
+    "flatten:sushi": "truffle-flattener ./contracts/dexes/SushiswapDex.sol > ./build/dexes/SushiswapDex.sol",
+    "test:univ2": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn truffle test --network fork ./test/dexes/univ2.js\"",
+    "flatten:univ2": "truffle-flattener ./contracts/dexes/UniswapDex.sol > ./build/dexes/UniswapDex.sol",
+    "test:deployment": "yarn concurrently --success first --kill-others \"yarn run:fork\" \"yarn deploy:fork\""
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
@@ -39,6 +46,7 @@
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
     "ganache-cli": "^6.12.1",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "truffle-flattener": "^1.5.0"
   }
 }
