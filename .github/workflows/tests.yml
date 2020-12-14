@@ -4,7 +4,7 @@ on: push
 
 jobs:
   test:
-    name: Test Layer contracts for ${{ matrix.dex }} dex
+    name: Test Layer contracts for ${{ matrix.dex }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

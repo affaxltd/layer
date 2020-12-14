@@ -196,7 +196,7 @@ contract Layer is Ownable, ILayer {
 
     require(total >= minAmountOut, "Did not receive enough tokens");
 
-    emit Swap(buyToken, sellToken, initiator, target, amountIn, slippage, total);
+    emit Swap(buyToken, sellToken, target, initiator, amountIn, slippage, total);
 
     return total;
   }

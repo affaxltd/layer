@@ -4,10 +4,10 @@ pragma experimental ABIEncoderV2;
 
 interface ILayer {
   event Swap(
-    address buyToken,
-    address sellToken,
+    address indexed buyToken,
+    address indexed sellToken,
+    address indexed target,
     address initiator,
-    address target,
     uint256 amountIn,
     uint256 slippage,
     uint256 total
