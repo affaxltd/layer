@@ -2,6 +2,10 @@
 
 **Layer** is deployed at **TBD** on the ethereum mainnet.
 
+{% hint style="warning" %}
+We recommend getting the **Layer** contract address from the [LayerRegistry](layerregistry.md) contract, as that contract will never change address but the **Layer** might \(critical bugs might be found and wanted to be fixed, requiring a new **Layer** contract\).
+{% endhint %}
+
 ## Events
 
 ### Swap
