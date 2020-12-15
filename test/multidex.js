@@ -5,7 +5,7 @@ const Layer = artifacts.require("Layer");
 const IERC20 = artifacts.require("IERC20");
 
 const dexes = [
-  ["univ2", "UniswapDex"],
+  ["uniV2", "UniswapDex"],
   ["curve", "CurveDex"],
   ["univ2", "UniswapDex"],
 ];

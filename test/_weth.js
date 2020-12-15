@@ -7,8 +7,9 @@ module.exports = {
   wethAddress: wethAddress,
   async getWeth(account) {
     const instance = await Weth.at(wethAddress);
+
     await instance.deposit({
-      value: parseTokens(10, 18).toString(),
+      value: parseTokens(100, 18).toString(),
       from: account,
     });
   },
