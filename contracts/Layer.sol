@@ -14,6 +14,13 @@ contract Layer is Ownable, ILayer {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
+  /*
+  Maximum slippage for swap
+  Max = 1,000,000
+  1,000,000 = 100%
+  10,000 = 1%
+  1 = 0.0001%
+  */
   uint256 public constant MaxSlippage = 1e6;
 
   mapping(string => address) public getDex;
@@ -143,16 +150,6 @@ contract Layer is Ownable, ILayer {
     allDexes.push(name);
   }
 
-  function setDex(string memory name, address dexAddress) public onlyOwner {
-    require(_dexExists(name), "Dex does not exist");
-    getDex[name] = dexAddress;
-  }
-
-  function deleteDex(string memory name) public onlyOwner {
-    require(_dexExists(name), "Dex does not exist");
-    getDex[name] = address(0);
-  }
-
   function _check(
     address buyToken,
     address sellToken,
@@ -181,11 +178,11 @@ contract Layer is Ownable, ILayer {
 
     require(dex != address(0), "Dex does not exist");
 
-    uint256 received = ILiquidityDex(dex).getReturn(buyToken, sellToken, amountIn);
+    uint256 promised = ILiquidityDex(dex).getReturn(buyToken, sellToken, amountIn);
 
-    require(received > 0, "No tokens would be received");
+    require(promised > 0, "No tokens promised");
 
-    uint256 minAmountOut = _calculateMinimum(received, slippage);
+    uint256 minAmountOut = _calculateMinimum(promised, slippage);
     uint256 originalBalance = _balance(buyToken, target);
 
     IERC20(sellToken).safeIncreaseAllowance(dex, amountIn);
