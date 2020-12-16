@@ -10,7 +10,9 @@ For a higher-level howto, see the [Examples ]()page.
 **Layer** is meant to be used on-chain, as there are much better tools to swap tokens with off-chain tools \(like [Matcha](https://matcha.xyz/)\).
 {% endhint %}
 
-{% page-ref page="smart-contracts/layerregistry.md" %}
+{% page-ref page="links.md" %}
 
 {% page-ref page="smart-contracts/layer.md" %}
+
+
 
